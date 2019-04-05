@@ -1,4 +1,4 @@
-##usage
+## usage
 1. train and evaluate the network with logging
 2. plot log results
 
