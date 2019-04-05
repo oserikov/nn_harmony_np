@@ -4,7 +4,7 @@
 
 ### train and evaluate with logging
 ```
-$ python3 -u use_rnn.py 5 100 tur_words.txt > nn_5_100_tur.log
+$ python3 -u use_rnn.py 5 100 data/tur_words.txt > nn_5_100_tur.log
 ```
 
 **NB!**
