@@ -2,7 +2,7 @@ import random
 
 import numpy as np
 
-from np_nn_maths import sigmoid, deriv_tanh, deriv_sigmoid, softmax, neg_log
+from np_nn_maths import sigmoid, deriv_tanh, deriv_sigmoid, relu, deriv_relu, softmax, neg_log
 
 
 class NNModel:
@@ -27,12 +27,16 @@ class NNModel:
             return np.tanh(x)
         if self.HIDDEN_ACTIVATION == "sigmoid":
             return sigmoid(x)
+        if self.HIDDEN_ACTIVATION == "relu":
+            return relu(x)
 
     def deriv_hidden_activation(self, activation):
         if self.HIDDEN_ACTIVATION == "tanh":
             return deriv_tanh(activation)
         if self.HIDDEN_ACTIVATION == "sigmoid":
             return deriv_sigmoid(activation)
+        if self.HIDDEN_ACTIVATION == "relu":
+            return deriv_relu(activation)
 
     def alphabet_position_to_onehot_encode(self, x):
         onehot_encoded = np.zeros((self.alphabet_size, 1))

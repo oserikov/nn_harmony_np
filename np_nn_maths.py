@@ -15,8 +15,16 @@ def sigmoid(x):
     return 1. / (1. + np.exp(-x))
 
 
-def deriv_sigmoid(sigmoid):
-    return sigmoid * (1. - sigmoid)
+def deriv_sigmoid(sigmoid_value):
+    return sigmoid_value * (1. - sigmoid_value)
+
+
+def relu(x):
+    return np.maximum(x, 0)
+
+
+def deriv_relu(relu_value):
+    return 1. * (relu_value > 0)
 
 
 def neg_log(x):

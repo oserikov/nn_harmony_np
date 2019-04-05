@@ -2,9 +2,12 @@ from nn_model import NNModel
 import sys
 import traceback
 
-
 EPOCHS_NUM = 100
 HIDDEN_SIZE = 2
+
+# HIDDEN_TYPE="tanh"
+# HIDDEN_TYPE="sigmoid"
+HIDDEN_TYPE = "relu"
 
 
 def help_and_exit():
@@ -62,7 +65,7 @@ def load_data():
 data, alphabet = load_data()
 training_data = [(entry[:-1], entry[1:]) for entry in data]
 
-model = NNModel(alphabet, HIDDEN_SIZE)
+model = NNModel(alphabet, HIDDEN_SIZE, activation=HIDDEN_TYPE)
 model.train(training_data, EPOCHS_NUM)
 
 hidden_unit_activation_for_char = [{} for unit_idx in range(HIDDEN_SIZE)]
