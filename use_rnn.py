@@ -6,8 +6,8 @@ EPOCHS_NUM = 100
 HIDDEN_SIZE = 2
 
 # HIDDEN_TYPE="tanh"
-# HIDDEN_TYPE="sigmoid"
-HIDDEN_TYPE = "relu"
+HIDDEN_TYPE="sigmoid"
+# HIDDEN_TYPE = "relu"
 
 
 def help_and_exit():
