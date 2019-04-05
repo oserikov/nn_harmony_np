@@ -21,7 +21,14 @@ FILENAME (default: STDIN) is the relative path to vocabulary file to train on.
 
 ### plot results
 ```
-$ cat nn_5_100_tur.log | python3 plot_results
+$ cat nn_5_100_tur.log | python3 plot_results.py
 ```
 plots named `unit_${UNIT_IDX}.png` will appear in the folder
 
+Alternatively use 
+
+```
+$ cat nn_5_100_tur.log | python3 plot_results.py myprefix
+```
+
+and the plots will be named `myprefix_${UNIT_IDX}.png` 
