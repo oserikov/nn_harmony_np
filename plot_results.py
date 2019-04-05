@@ -45,7 +45,9 @@ for unit_idx, unit_activations_for_letters in activations_log["HIDDEN"].items():
     ax.set_ylim([lowest_activation_value, highest_activation_value])
 
     for letter_idx, (letter_name, letter_in_latex) in enumerate(letters_to_latex_encoded_letters.items()):
-        value = unit_activations_for_letters[letter_name]["value"]
+        value = 0
+        if letter_name in unit_activations_for_letters: 
+            value = unit_activations_for_letters[letter_name]["value"]
 
         if letter_name in vowels:
             ax.plot(letter_idx, value, "o", mfc='none', color='C0')
