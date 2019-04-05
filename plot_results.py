@@ -8,6 +8,10 @@ import sys
 
 DEBUG = True
 
+prefix = 'unit'
+if len(sys.argv) == 2:
+	prefix = sys.argv[1]
+
 l_reader = LogReader()
 l_reader.parse_log_file(sys.stdin)
 
@@ -52,6 +56,6 @@ for unit_idx, unit_activations_for_letters in activations_log["HIDDEN"].items():
     ax.set_yticks((0, 1))
     ax.set_xticks(())
 
-    plt.savefig('unit_' + str(unit_idx) + '.png')
+    plt.savefig(prefix + '_' + str(unit_idx) + '.png')
 
     plt.clf()
