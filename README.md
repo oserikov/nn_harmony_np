@@ -1,3 +1,21 @@
+now working on:
+1. train the RNN with _N_ hidden units in (single) hidden layer to predict next character in word given a current character.
+1. given the _{<word<sub>i</sub>, feature<sub>i</sub>>}_ dataset (e.g. _{.., <"türlerinde", +front>, ...}_)
+   1. feed the network word-by-word to receive the set _H={h<sub>ij</sub>}_. 
+   where _h<sub>ij</sub>_ represents the hidden units activations for the _j_-th letter of _i_-th word
+   1. train the supervised classifier to predict _feature_k_ given _{h<sub>k1</sub>, .., h<sub>kl</sub>} 
+   (l = len(word<sub>k</sub>))_.
+   1. via extracting the features importance from classifier **get the intuition 
+   whether there are any units strongly connected with the phonological features**.
+
+
+- [x] implement the RNN
+- [X] encode words with unit activations (embeddings, aren't they). see `sandbox_script.py`
+- [ ] train the classifier (decision tree?) on the encoded words
+- [ ] extract features importance data
+- [ ] miracle, magic etc.
+
+
 ## usage
 1. train and evaluate the network with logging
 2. plot log results
