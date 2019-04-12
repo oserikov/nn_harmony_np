@@ -3,14 +3,26 @@ import sys
 import traceback
 import matplotlib.pyplot as plt
 
-EPOCHS_NUM = 100
-HIDDEN_SIZE = 2
 
-# HIDDEN_TYPE="tanh"
-HIDDEN_TYPE = "sigmoid"
-# HIDDEN_TYPE = "relu"
+def initialize():
+    EPOCHS_NUM = 100
+    HIDDEN_SIZE = 2
+    # HIDDEN_TYPE="tanh"
+    HIDDEN_TYPE = "sigmoid"
+    # HIDDEN_TYPE = "relu"
+    PLOT_EPOCHS = False
 
-PLOT_EPOCHS = False
+    VOCAB_FILE_FILENAME = "STDIN"
+    try:
+        HIDDEN_SIZE = int(sys.argv[1])
+        EPOCHS_NUM = int(sys.argv[2])
+        if len(sys.argv) > 3:
+            VOCAB_FILE_FILENAME = sys.argv[3]
+    except Exception:
+        traceback.print_exc()
+        print()
+        help_and_exit()
+    return EPOCHS_NUM, HIDDEN_SIZE, HIDDEN_TYPE, VOCAB_FILE_FILENAME, PLOT_EPOCHS
 
 
 def help_and_exit():
@@ -54,31 +66,24 @@ def main():
     if len(sys.argv) > 1 and any(["--help" in argv for argv in sys.argv[1:]]):
         help_and_exit()
 
-    VOCAB_FILE_FILENAME = "STDIN"
-    try:
-        HIDDEN_SIZE = int(sys.argv[1])
-        EPOCHS_NUM = int(sys.argv[2])
-        if len(sys.argv) > 3:
-            VOCAB_FILE_FILENAME = sys.argv[3]
-    except Exception:
-        traceback.print_exc()
-        print()
-        help_and_exit()
+    EPOCHS_NUM, HIDDEN_SIZE, HIDDEN_TYPE, VOCAB_FILE_FILENAME, PLOT_EPOCHS = initialize()
 
     data, alphabet = load_data(VOCAB_FILE_FILENAME)
     training_data = [(entry[:-1], entry[1:]) for entry in data]
 
     model = NNModel(alphabet, HIDDEN_SIZE, activation=HIDDEN_TYPE)
 
-    if PLOT_EPOCHS:
-        ax = plt.axes()
+    # region train the model
     for epoch_num, epoch_loss in model.train(training_data, EPOCHS_NUM):
         print('\t'.join([f"epoch_num: {epoch_num}", f"epoch_loss: {epoch_loss}"]))
 
+        # region plot loss
         if PLOT_EPOCHS:
-            ax.plot([epoch_num], [epoch_loss], 'rx')
+            plt.plot([epoch_num], [epoch_loss], 'rx')
             plt.draw()
             plt.pause(0.01)
+        # endregion
+    # endregion
 
     hidden_unit_activation_for_char = [{} for unit_idx in range(HIDDEN_SIZE)]
     output_unit_activation_for_char = [{} for unit_idx in range(len(alphabet))]
@@ -98,6 +103,7 @@ def main():
         for unit_idx, unit_activation in enumerate(output_units_activations):
             output_unit_activation_for_char[unit_idx][char] = output_units_activations[unit_idx]
 
+    # region log model state
     for unit_idx, unit_activations in enumerate(hidden_unit_activation_for_char):
         for char in alphabet:
             print(f"activation of HIDDEN unit {unit_idx} for char {char}" + '\t' +
@@ -125,6 +131,7 @@ def main():
             print(
                 f"weight HIDDEN unit {hidden_idx} to OUTPUT unit {output_idx} (represents char {output_char})" + '\t' +
                 str(weight))
+    # endregion
 
 
 if __name__ == "__main__":
