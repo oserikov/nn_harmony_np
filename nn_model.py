@@ -1,19 +1,38 @@
 import random
+import pickle
 
 import numpy as np
 
 from np_nn_maths import sigmoid, deriv_tanh, deriv_sigmoid, relu, deriv_relu, softmax, neg_log
 
+
 class ModelStateLogDTO:
-    def __init__(self, word, char, hidden_outs, output_ins, output_outs, W_ih, W_hh, W_ho):
+    def as_dict(self):
+        return self._as_dict
+
+    def __init__(self, word, char, hidden_outs, output_ins, output_outs, W_ih, W_hh, W_ho, ix2char, char2ix):
         self.word = word
         self.char = char
-        self.W_ih = np.ravel(W_ih).tolist()
-        self.W_hh = np.ravel(W_hh).tolist()
-        self.W_ho = np.ravel(W_ho).tolist()
-        self.output_outs = np.ravel(output_outs).tolist()
-        self.output_ins = np.ravel(output_ins).tolist()
-        self.hidden_outs = np.ravel(hidden_outs).tolist()
+        self.hidden_outs = hidden_outs
+        self.output_ins = output_ins
+        self.output_outs = output_outs
+        self.W_ih = W_ih
+        self.W_hh = W_hh
+        self.W_ho = W_ho
+
+        self._as_dict = [
+            {"word": word},
+            {"char": char},
+            {f"weight_I{j}_H{i}": values[j] for i, values in enumerate(W_ih) for j in range(len(values))},
+            {f"weight_H{j}_H{i}": values[j] for i, values in enumerate(W_hh) for j in range(len(values))},
+            {f"weight_H{j}_O{i}": values[j] for i, values in enumerate(W_ho) for j in range(len(values))},
+            {"output_outs_" + str(idx) + ix2char[idx]: value
+             for idx, value in enumerate(np.ravel(output_outs).tolist())},
+            {"output_ins_" + str(idx) + ix2char[idx]: value
+             for idx, value in enumerate(np.ravel(output_ins).tolist())},
+            {"hidden_outs_" + str(idx) + str(idx): value
+             for idx, value in enumerate(np.ravel(hidden_outs).tolist())}
+        ]
 
 
 class NNModel:
@@ -183,7 +202,8 @@ class NNModel:
 
             states_log.append(ModelStateLogDTO(word, char,
                                                hidden_out_, out_in_, out_out_,
-                                               self.W_ih, self.W_hh, self.W_ho))
+                                               self.W_ih, self.W_hh, self.W_ho,
+                                               self.ix_to_char, self.char_to_ix))
 
             # predicted_char_alphabet_idx = np.random.choice(range(self.alphabet_size), p=out_out_flattened)  # todo fix
             # predicted_char_onehot = self.alphabet_position_to_onehot_encode(predicted_char_alphabet_idx)
@@ -231,4 +251,15 @@ class NNModel:
                 h_prev = np.zeros((self.hidden_size, 1))
                 sample_starting_char = random.choice(list(self.char_to_ix.keys()))
                 keys_ = self.char_to_ix[sample_starting_char]
-                yield sample_starting_char+self.sample(h_prev, keys_, 10)
+                yield sample_starting_char + self.sample(h_prev, keys_, 10)
+
+    def save(self, model_filename):
+        with open(model_filename, 'wb') as model_file:
+            pickle.dump(self, model_file)
+
+    @staticmethod
+    def load_model(model_filename):
+        model: NNModel
+        with open(model_filename, 'rb') as model_file:
+            model = pickle.load(model_file)
+        return model

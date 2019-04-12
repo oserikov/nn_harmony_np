@@ -50,7 +50,7 @@ def word_level_dataset_2_encoded_ngrams_dataset(model, words2target_dataset, ngr
 
 
 def main():
-    VOCAB_FILE_FILENAME = r"data/tur_words.txt"
+    VOCAB_FILE_FILENAME = r"data/tur_apertium_words.txt"
     EPOCHS_NUM = 1
     HIDDEN_TYPE = "sigmoid"
     HIDDEN_SIZE = 2

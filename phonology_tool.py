@@ -20,6 +20,9 @@ class PhonologyTool:
     def is_front(self, char):
         return self.is_vowel(char) and "+front" in self.char2features.get(char, [])
 
+    def is_back(self, char):
+        return self.is_vowel(char) and "-front" in self.char2features.get(char, [])
+
     def is_round(self, char):
         return self.is_vowel(char) and "+round" in self.char2features.get(char, [])
 
@@ -27,3 +30,11 @@ class PhonologyTool:
         return self.is_consonant(char) \
                and "+voiced" in self.char2features.get(char, []) \
                and "+stop" in self.char2features.get(char, [])
+
+    def shows_front_harmony(self, string):
+        res = all([self.is_front(c) for c in string if self.is_vowel(c)]) \
+              and len([c for c in string if self.is_vowel(c)]) > 1
+        return res
+
+    def shows_back_harmony(self, string):
+        return all([self.is_back(c) for c in string if self.is_vowel(c)])

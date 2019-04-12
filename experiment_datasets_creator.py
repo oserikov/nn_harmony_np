@@ -33,6 +33,29 @@ class ExperimentCreator:
 
         return training_data
 
+    def construct_ngram_dataset(self, ngram2target_fun: Callable, nn_feature_extractor_fun: Callable, ngram_len: int):
+        training_data = []
+        for word in self.dataset:
+            nn_features = self.get_nn_features_for_word(word)
+
+            word_training_data = []
+            for idx, nn_feature in enumerate(nn_features[:-ngram_len + 1]):
+                ngram = ''.join([f.char for f in nn_features[idx:idx+ngram_len]])
+                tmp_features = [{"ngram": ngram}]
+                for idx, tmp_feature in enumerate(nn_features[idx:idx+ngram_len]):
+                    tmp_features.append({f"char_{idx}_"+k: v
+                                         for entry in nn_feature_extractor_fun(tmp_feature)
+                                         for k, v in entry.items()})
+                word_training_data.append((tmp_features, ngram2target_fun(ngram)))
+                # word_training_data.append((nn_feature_extractor_fun(nn_feature), ngram2target_fun(nn_feature.char)))
+
+            training_data.extend(word_training_data)
+
+        return training_data
+
+    def front_harmony_dataset(self):
+        return self.construct_ngram_dataset(self.phon_tool.shows_front_harmony, self.extract_all_nn_features, 4)
+
     def vov_vs_cons_dataset(self):
         return self.construct_unigram_dataset(self.phon_tool.is_vowel, self.extract_all_nn_features)
 
@@ -91,10 +114,7 @@ class ExperimentCreator:
         return training_data
 
     def extract_all_nn_features(self, nn_feature: ModelStateLogDTO):
-        # res =
-        # for k,v in res.items():
-        #     res[k] = np.ravel(v).tolist()
-        return vars(nn_feature)
+        return nn_feature.as_dict()
 
     def get_nn_features_for_word(self, word) -> List[ModelStateLogDTO]:
         return self.nn_model.run_model_on_word(word)
