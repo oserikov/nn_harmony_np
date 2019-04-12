@@ -1,0 +1,30 @@
+a   vow -front -round
+l   cons
+e   vow +front -round
+r   cons
+t   cons -voiced +stop
+k   cons -voiced +stop
+n   cons
+i   vow +front -round
+ı   vow -front -round
+d   cons +voiced +stop
+s   cons -voiced +stop
+ş   cons -voiced +stop
+y   cons
+u   vow -front +round
+ü   vow +front +round
+o   vow -front +round
+b   cons +voiced +stop
+z   cons
+m   cons
+g   cons +voiced +stop
+ö   vow +front +round
+ç   cons -voiced +stop
+p   cons -voiced +stop
+v   cons
+h   cons -voiced
+ğ   cons
+f   cons -voiced
+c   cons +voiced +stop
+j   cons
+â   vow
