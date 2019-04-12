@@ -50,7 +50,7 @@ class NNModel:
 
         # forward pass
 
-        loss = 0
+        losses = []
         for t in range(len(xs)):
             x_input = xs[t]
             y_target = ys[t]
@@ -66,7 +66,7 @@ class NNModel:
 
             prediction = out_out_[t]
 
-            loss += neg_log(prediction[y_target, 0])
+            losses.append(neg_log(prediction[y_target, 0]))
 
         dW_ih = np.zeros_like(self.W_ih)
         dW_hh = np.zeros_like(self.W_hh)
@@ -94,7 +94,7 @@ class NNModel:
             dh_next = self.W_hh.T @ dhraw
 
         last_hidden_out = hidden_out_[len(xs) - 1]
-        return loss, dW_ih, dW_hh, dW_ho, last_hidden_out
+        return losses, dW_ih, dW_hh, dW_ho, last_hidden_out
 
     # prediction, one full forward pass
     def sample(self, hidden_out_, seed_idx, n):
@@ -161,13 +161,16 @@ class NNModel:
         h_prev = np.zeros((self.hidden_size, 1))
 
         for epoch_num in range(EPOCHS_NUM):
+            np.random.shuffle(training_data)
+
+            epoch_losses = []
             for batch in training_data:
                 h_prev = np.zeros((self.hidden_size, 1))  # reset RNN memory
 
                 inputs = [self.char_to_ix[ch] for ch in batch[0]]
                 targets = [self.char_to_ix[ch] for ch in batch[1]]
 
-                epoch_loss, dW_ih, dW_hh, dW_ho, h_prev = self.process_batch(inputs, targets, h_prev)
+                batch_losses, dW_ih, dW_hh, dW_ho, h_prev = self.process_batch(inputs, targets, h_prev)
 
                 momentum_delta_W_ih = self.learning_rate * dW_ih + self.momentum_rate * momentum_delta_W_ih
                 self.W_ih -= momentum_delta_W_ih
@@ -178,10 +181,12 @@ class NNModel:
                 momentum_delta_W_ho = self.learning_rate * dW_ho + self.momentum_rate * momentum_delta_W_ho
                 self.W_ho -= momentum_delta_W_ho
 
+                epoch_losses.extend(batch_losses)
+
             if logging:
-                print('iter %d, loss: %f' % (epoch_num, epoch_loss))  # print progress
-                if sample:
-                    h_prev = np.zeros((self.hidden_size, 1))
-                    sample_starting_char = random.choice(list(self.char_to_ix.keys()))
-                    keys_ = self.char_to_ix[sample_starting_char]
-                    print("sample: ", sample_starting_char+self.sample(h_prev, keys_, 10))
+                yield epoch_num, np.mean(epoch_losses)
+            if sample:
+                h_prev = np.zeros((self.hidden_size, 1))
+                sample_starting_char = random.choice(list(self.char_to_ix.keys()))
+                keys_ = self.char_to_ix[sample_starting_char]
+                yield sample_starting_char+self.sample(h_prev, keys_, 10)

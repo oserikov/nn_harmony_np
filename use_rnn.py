@@ -1,15 +1,16 @@
 from nn_model import NNModel
 import sys
 import traceback
+import matplotlib.pyplot as plt
 
 EPOCHS_NUM = 100
 HIDDEN_SIZE = 2
 
 # HIDDEN_TYPE="tanh"
 HIDDEN_TYPE = "sigmoid"
-
-
 # HIDDEN_TYPE = "relu"
+
+PLOT_EPOCHS = False
 
 
 def help_and_exit():
@@ -68,7 +69,16 @@ def main():
     training_data = [(entry[:-1], entry[1:]) for entry in data]
 
     model = NNModel(alphabet, HIDDEN_SIZE, activation=HIDDEN_TYPE)
-    model.train(training_data, EPOCHS_NUM)
+
+    if PLOT_EPOCHS:
+        ax = plt.axes()
+    for epoch_num, epoch_loss in model.train(training_data, EPOCHS_NUM):
+        print('\t'.join([f"epoch_num: {epoch_num}", f"epoch_loss: {epoch_loss}"]))
+
+        if PLOT_EPOCHS:
+            ax.plot([epoch_num], [epoch_loss], 'rx')
+            plt.draw()
+            plt.pause(0.01)
 
     hidden_unit_activation_for_char = [{} for unit_idx in range(HIDDEN_SIZE)]
     output_unit_activation_for_char = [{} for unit_idx in range(len(alphabet))]
