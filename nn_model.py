@@ -4,6 +4,17 @@ import numpy as np
 
 from np_nn_maths import sigmoid, deriv_tanh, deriv_sigmoid, relu, deriv_relu, softmax, neg_log
 
+class ModelStateLogDTO:
+    def __init__(self, word, char, hidden_outs, output_ins, output_outs, W_ih, W_hh, W_ho):
+        self.word = word
+        self.char = char
+        self.W_ih = np.ravel(W_ih).tolist()
+        self.W_hh = np.ravel(W_hh).tolist()
+        self.W_ho = np.ravel(W_ho).tolist()
+        self.output_outs = np.ravel(output_outs).tolist()
+        self.output_ins = np.ravel(output_ins).tolist()
+        self.hidden_outs = np.ravel(hidden_outs).tolist()
+
 
 class NNModel:
     def __init__(self, alphabet, hidden_size, activation="sigmoid", learning_rate=0.001, momentum_rate=0.9):
@@ -57,10 +68,13 @@ class NNModel:
 
             input_[t] = self.alphabet_position_to_onehot_encode(x_input)
 
+            # w_ih[1][14] * input[14] + w_hh[1][0]*h[0]+w_hh[1][1]*h[1] = hidden[1]
             hidden_in_ = self.W_ih @ input_[t] + self.W_hh @ hidden_out_[t - 1]
 
             hidden_out_[t] = self.hidden_activation(hidden_in_)
 
+            # w_ho[0][0]*ho[0] + w_ho[0][1]*ho[1] = o[0]
+            # w_ho[4][0]*ho[0] + w_ho[4][1]*ho[1] = o[4]
             out_in_[t] = self.W_ho @ hidden_out_[t]
             out_out_[t] = softmax(out_in_[t])
 
@@ -151,6 +165,34 @@ class NNModel:
         units_activations = {"hidden_layer": hidden_outs, "output_layer": output_outs}
         weights = {"IH": self.W_ih, "HH": self.W_hh, "HO": self.W_ho}
         return predicted_chars_sequence, units_activations, weights
+
+    def run_model_on_word(self, word):
+        hidden_out_ = np.zeros((self.hidden_size, 1))
+
+        states_log = []
+
+        for char in word:
+            input_idx = self.char_to_ix[char]
+            predicted_char_onehot = self.alphabet_position_to_onehot_encode(input_idx)
+
+            hidden_out_ = self.hidden_activation(self.W_ih @ predicted_char_onehot + self.W_hh @ hidden_out_)  # + bh)
+            out_in_ = self.W_ho @ hidden_out_  # + by
+            out_out_ = softmax(out_in_)
+
+            out_out_flattened = out_out_.ravel()
+
+            states_log.append(ModelStateLogDTO(word, char,
+                                               hidden_out_, out_in_, out_out_,
+                                               self.W_ih, self.W_hh, self.W_ho))
+
+            # predicted_char_alphabet_idx = np.random.choice(range(self.alphabet_size), p=out_out_flattened)  # todo fix
+            # predicted_char_onehot = self.alphabet_position_to_onehot_encode(predicted_char_alphabet_idx)
+            # predicted_chars_sequence.append(self.ix_to_char[predicted_char_alphabet_idx])
+            #
+            # hidden_outs.append(hidden_out_)
+            # output_outs.append(out_out_)
+
+        return states_log
 
     def train(self, training_data, num_of_epochs, logging=True, sample=False):
         EPOCHS_NUM = num_of_epochs

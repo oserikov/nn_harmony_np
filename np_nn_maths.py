@@ -1,8 +1,8 @@
 import numpy as np
 
 
-def softmax(z):
-    z -= np.max(z)
+def softmax(x):
+    z = x - np.max(x)
     sm = (np.exp(z).T / np.sum(np.exp(z), axis=0)).T
     return sm
 

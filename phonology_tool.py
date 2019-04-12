@@ -1,0 +1,29 @@
+from collections import defaultdict as dd
+
+
+class PhonologyTool:
+    char2features = dd(set)
+
+    def __init__(self, phonology_features_filename):
+        with open(phonology_features_filename, 'r', encoding="utf-8") as features_f:
+            for line in features_f:
+                split = line.strip().split('\t')
+                letter, features = split
+                self.char2features[letter].update(features.split())
+
+    def is_vowel(self, char):
+        return "vow" in self.char2features.get(char, [])
+
+    def is_consonant(self, char):
+        return not self.is_vowel(char)
+
+    def is_front(self, char):
+        return self.is_vowel(char) and "+front" in self.char2features.get(char, [])
+
+    def is_round(self, char):
+        return self.is_vowel(char) and "+round" in self.char2features.get(char, [])
+
+    def is_voiced_stop_consonant(self, char):
+        return self.is_consonant(char) \
+               and "+voiced" in self.char2features.get(char, []) \
+               and "+stop" in self.char2features.get(char, [])
