@@ -11,7 +11,9 @@ now working on:
 
 - [x] implement the RNN
 - [X] encode words with unit activations (embeddings, aren't they). see `sandbox_script.py`
-- [ ] train the classifier (decision tree?) on the encoded words
+- [X] train the classifier (decision tree?) on the encoded words
+  
+  now it's not that bad showing smth interesting. see `.ipynb`.
 - [ ] extract features importance data
 - [ ] miracle, magic etc.
 
