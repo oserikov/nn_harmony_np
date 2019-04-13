@@ -56,6 +56,9 @@ class ExperimentCreator:
     def front_harmony_dataset(self):
         return self.construct_ngram_dataset(self.phon_tool.shows_front_harmony, self.extract_all_nn_features, 4)
 
+    def round_feature_dataset(self):
+        return self.construct_unigram_dataset(self.phon_tool.is_round, self.extract_all_nn_features)
+
     def vov_vs_cons_dataset(self):
         return self.construct_unigram_dataset(self.phon_tool.is_vowel, self.extract_all_nn_features)
 
@@ -121,7 +124,7 @@ class ExperimentCreator:
 
 
     @staticmethod
-    def train_eatures_to_single_dict(dataset_train_features_list):
+    def train_features_to_single_dict(dataset_train_features_list):
         res = {}
         for idx, d in enumerate(dataset_train_features_list):
             for k, v in d.items():
@@ -133,7 +136,7 @@ class ExperimentCreator:
     def make_dataset_pretty(dataset):
         pretty_dataset = []
         for (train_entry, target_entry) in dataset:
-            pretty_dataset.append((ExperimentCreator.train_eatures_to_single_dict(train_entry), target_entry))
+            pretty_dataset.append((ExperimentCreator.train_features_to_single_dict(train_entry), target_entry))
         return pretty_dataset
 
 
