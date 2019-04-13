@@ -2,70 +2,51 @@ from nn_model import NNModel, ModelStateLogDTO
 from experiment_datasets_creator import ExperimentCreator
 from phonology_tool import PhonologyTool
 
-train_data_fn = "data/tur_apertium_words.txt"
+MODEL_FILENAME = "../model_size_2_activation_sigmoid.pkl"
 test_data_fn = "data/tur_swadesh.txt"
-
-HIDDEN_SIZE = 2
-HIDDEN_TYPE = "sigmoid"
-EPOCHS_NUM = 2
-MODEL_FILENAME = "tmp_model_fn"
-
-train_dataset = []
-with open(train_data_fn, 'r', encoding="utf-8") as train_data_f:
-    for line in train_data_f:
-        train_dataset.append(line.strip())
-
-alphabet = {c for word in train_dataset for c in word}
-print(alphabet)
-
-
-print(train_dataset)
-
-
-model = NNModel(alphabet, HIDDEN_SIZE, activation=HIDDEN_TYPE)
-
-train_data = [(entry[:-1], entry[1:]) for entry in train_dataset]
-for epoch_num, epoch_loss in model.train(train_data, EPOCHS_NUM):
-    print('\t'.join([f"epoch_num: {epoch_num}", f"epoch_loss: {epoch_loss}"]))
-
-
-
-model.save(MODEL_FILENAME)
-
-del model
+phonology_features_filename = "data/tur_phon_features.tsv"
 
 model = NNModel.load_model(MODEL_FILENAME)
-
 
 test_dataset = []
 with open(test_data_fn, 'r', encoding="utf-8") as test_data_f:
     for line in test_data_f:
-        if all(c in alphabet for c in line.strip()):
+        if all(c in model.alphabet for c in line.strip()):
             test_dataset.append(line.strip())
-print(test_dataset)
-pt = PhonologyTool("tur_phon_features.tsv")
-ec = ExperimentCreator(model, test_dataset, pt)
 
-dataset = ec.front_harmony_dataset()
+phonologyTool = PhonologyTool(phonology_features_filename)
+experimentCreator = ExperimentCreator(model, test_dataset, phonologyTool)
+
+# front_harmony_dataset
+front_harmony_dataset_fn = "front_harmony_dataset.tsv"
+front_harmony_dataset = experimentCreator.make_dataset_pretty(experimentCreator.front_harmony_dataset())
+experimentCreator.save_dataset_to_tsv(front_harmony_dataset, front_harmony_dataset_fn)
+
+# vov_vs_cons_dataset
+vov_vs_cons_dataset_fn = "vov_vs_cons_dataset.tsv"
+vov_vs_cons_dataset = experimentCreator.make_dataset_pretty(experimentCreator.vov_vs_cons_dataset())
+experimentCreator.save_dataset_to_tsv(vov_vs_cons_dataset, vov_vs_cons_dataset_fn)
+
+# front_feature_dataset
+front_feature_dataset_fn = "front_feature_dataset.tsv"
+front_feature_dataset = experimentCreator.make_dataset_pretty(experimentCreator.front_feature_dataset())
+experimentCreator.save_dataset_to_tsv(front_feature_dataset, front_feature_dataset_fn)
+
+# is_starting_consonant_cluster_dataset
+is_starting_consonant_cluster_dataset_fn = "is_starting_consonant_cluster_dataset.tsv"
+is_starting_consonant_cluster_dataset = experimentCreator.make_dataset_pretty(experimentCreator.is_starting_consonant_cluster_dataset())
+experimentCreator.save_dataset_to_tsv(is_starting_consonant_cluster_dataset, is_starting_consonant_cluster_dataset_fn)
+
+# second_consonant_in_cluster_dataset
+second_consonant_in_cluster_dataset_fn = "second_consonant_in_cluster_dataset.tsv"
+second_consonant_in_cluster_dataset = experimentCreator.make_dataset_pretty(experimentCreator.second_consonant_in_cluster_dataset())
+experimentCreator.save_dataset_to_tsv(second_consonant_in_cluster_dataset, second_consonant_in_cluster_dataset_fn)
+
+# voiced_stop_consonant_dataset
+voiced_stop_consonant_dataset_fn = "voiced_stop_consonant_dataset.tsv"
+voiced_stop_consonant_dataset = experimentCreator.make_dataset_pretty(experimentCreator.voiced_stop_consonant_dataset())
+experimentCreator.save_dataset_to_tsv(voiced_stop_consonant_dataset, voiced_stop_consonant_dataset_fn)
 
 
-def train_to_single_dict(train_dicts_list):
-    res = {}
-    for idx, d in enumerate(train_dicts_list):
-        for k, v in d.items():
-            res[f"{idx}_" + k] = v
-    return res
-
-
-pretty_dataset = []
-for (train_entry, target_entry) in dataset:
-    pretty_dataset.append((train_to_single_dict(train_entry), target_entry))
-
-first_entry_keys = list(pretty_dataset[0][0].keys())
-first_entry_keys_not_unique = set(first_entry_keys[3:])
-
-good = [entry for entry in pretty_dataset if entry[1]]
-
-bad = [entry for entry in pretty_dataset if not entry[1]]
 
 

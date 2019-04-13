@@ -3,7 +3,7 @@ import numpy as np
 from phonology_tool import PhonologyTool
 from nn_model import NNModel, ModelStateLogDTO
 from typing import List, Callable
-
+import csv
 
 # 1. vow vs cons
 # 2. +front vs -front
@@ -118,3 +118,41 @@ class ExperimentCreator:
 
     def get_nn_features_for_word(self, word) -> List[ModelStateLogDTO]:
         return self.nn_model.run_model_on_word(word)
+
+
+    @staticmethod
+    def train_eatures_to_single_dict(dataset_train_features_list):
+        res = {}
+        for idx, d in enumerate(dataset_train_features_list):
+            for k, v in d.items():
+                res[f"{idx}_" + k] = v
+        return res
+
+
+    @staticmethod
+    def make_dataset_pretty(dataset):
+        pretty_dataset = []
+        for (train_entry, target_entry) in dataset:
+            pretty_dataset.append((ExperimentCreator.train_eatures_to_single_dict(train_entry), target_entry))
+        return pretty_dataset
+
+
+    @staticmethod
+    def save_dataset_to_tsv(dataset, dataset_fn):
+
+        dataset_to_single_dicts_list = []
+        for entry in dataset:
+            new_entry = entry[0].copy()
+            new_entry["TARGET"] = entry[1]
+            dataset_to_single_dicts_list.append(new_entry)
+
+        dataset_keys = list(dataset_to_single_dicts_list[0].keys())
+        with open(dataset_fn, 'w', encoding="utf-8", newline='') as dataset_f:
+            dictWriter = csv.DictWriter(dataset_f, dataset_to_single_dicts_list[0].keys(), delimiter='\t')
+            dictWriter.writeheader()
+            dictWriter.writerows(dataset_to_single_dicts_list)
+
+            # print('\t'.join(dataset_keys + ["target"]), file=dataset_f)
+            # for (features, target) in dataset:
+            #     print('\t'.join([features[key] for key in dataset_keys] + [target]), file=dataset_f)
+
