@@ -23,9 +23,26 @@ class ModelStateLogDTO:
         self._as_dict = [
             {"word": word},
             {"char": char},
-            {f"weight_I{j}_H{i}": values[j] for i, values in enumerate(W_ih) for j in range(len(values))},
-            {f"weight_H{j}_H{i}": values[j] for i, values in enumerate(W_hh) for j in range(len(values))},
-            {f"weight_H{j}_O{i}": values[j] for i, values in enumerate(W_ho) for j in range(len(values))},
+            {f"weight_I{input_idx}_H{hidden_idx}": values[input_idx]
+             for hidden_idx, values in enumerate(W_ih)
+             for input_idx in range(len(values))},
+
+            {f"cweight_I{ix2char[input_idx]}_H{hidden_idx}": values[input_idx]
+             for hidden_idx, values in enumerate(W_ih)
+             for input_idx in range(len(values))},
+
+            {f"weight_H{hidden_src_idx}_H{hidden_tgt_idx}": values[hidden_src_idx]
+             for hidden_tgt_idx, values in enumerate(W_hh)
+             for hidden_src_idx in range(len(values))},
+
+            {f"weight_H{hidden_idx}_O{output_idx}": values[hidden_idx]
+             for output_idx, values in enumerate(W_ho)
+             for hidden_idx in range(len(values))},
+
+            {f"cweight_H{hidden_idx}_O{ix2char[output_idx]}": values[hidden_idx]
+             for output_idx, values in enumerate(W_ho)
+             for hidden_idx in range(len(values))},
+
             {"output_outs_" + str(idx) + ix2char[idx]: value
              for idx, value in enumerate(np.ravel(output_outs).tolist())},
             {"output_ins_" + str(idx) + ix2char[idx]: value
