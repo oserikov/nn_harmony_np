@@ -2,9 +2,9 @@ from collections import defaultdict as dd
 
 
 class PhonologyTool:
-    char2features = dd(set)
 
     def __init__(self, phonology_features_filename):
+        self.char2features = dd(set)
         with open(phonology_features_filename, 'r', encoding="utf-8") as features_f:
             for line in features_f:
                 split = line.strip().split('\t')
