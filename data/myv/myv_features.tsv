@@ -1,33 +1,36 @@
 н	cons	
-е	vow	+front
+е	vow	+front -round 
 т	cons	
-а	vow	
-о	vow	-front
+а	vow	-round
+о	vow	-front +round
 с	cons	
 ь	cons	
 к	cons	
 в	cons	
-и	vow	+front
+и	vow	+front -round
 м	cons	
 р	cons	
 л	cons	
-я	vow	
+я	vow	-round
 д	cons	
 з	cons	
 п	cons	
-э	vow	+front
-у	vow	-front
+э	vow	+front -round
+у	vow	-front +round
 й	cons	
 ш	cons	
 ч	cons	
 г	cons	
-ы	vow	
+ы	vow	-round
 ц	cons	
 б	cons	
-ё	vow	
+ё	vow	-round
 ж	cons	
 ю	vow	-front
 ф	cons	
 х	cons	
 щ	cons	
 ъ	cons	
+ҥ	cons	
+ӧ	vow	+round
+ӱ	vow	+round
