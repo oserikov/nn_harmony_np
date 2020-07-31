@@ -23,31 +23,31 @@ class ModelStateLogDTO:
         self._as_dict = [
             {"word": word},
             {"char": char},
-            {f"weight_I{input_idx}_H{hidden_idx}": values[input_idx]
+            {f"NN_FEAT_weight_I{input_idx}_H{hidden_idx}": values[input_idx]
              for hidden_idx, values in enumerate(W_ih)
              for input_idx in range(len(values))},
 
-            {f"cweight_I{ix2char[input_idx]}_H{hidden_idx}": values[input_idx]
+            {f"NN_FEAT_cweight_I{ix2char[input_idx]}_H{hidden_idx}": values[input_idx]
              for hidden_idx, values in enumerate(W_ih)
              for input_idx in range(len(values))},
 
-            {f"weight_H{hidden_src_idx}_H{hidden_tgt_idx}": values[hidden_src_idx]
+            {f"NN_FEAT_weight_H{hidden_src_idx}_H{hidden_tgt_idx}": values[hidden_src_idx]
              for hidden_tgt_idx, values in enumerate(W_hh)
              for hidden_src_idx in range(len(values))},
 
-            {f"weight_H{hidden_idx}_O{output_idx}": values[hidden_idx]
+            {f"NN_FEAT_NN_FEAT_weight_H{hidden_idx}_O{output_idx}": values[hidden_idx]
              for output_idx, values in enumerate(W_ho)
              for hidden_idx in range(len(values))},
 
-            {f"cweight_H{hidden_idx}_O{ix2char[output_idx]}": values[hidden_idx]
+            {f"NN_FEAT_cweight_H{hidden_idx}_O{ix2char[output_idx]}": values[hidden_idx]
              for output_idx, values in enumerate(W_ho)
              for hidden_idx in range(len(values))},
 
-            {"output_outs_" + str(idx) + ix2char[idx]: value
+            {"NN_FEAT_output_outs_" + str(idx) + ix2char[idx]: value
              for idx, value in enumerate(np.ravel(output_outs).tolist())},
-            {"output_ins_" + str(idx) + ix2char[idx]: value
+            {"NN_FEAT_output_ins_" + str(idx) + ix2char[idx]: value
              for idx, value in enumerate(np.ravel(output_ins).tolist())},
-            {"hidden_outs_" + str(idx) + str(idx): value
+            {"NN_FEAT_hidden_outs_" + str(idx) + str(idx): value
              for idx, value in enumerate(np.ravel(hidden_outs).tolist())}
         ]
 
