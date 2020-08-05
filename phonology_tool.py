@@ -7,8 +7,7 @@ class PhonologyTool:
         self.char2features = dd(set)
         with open(phonology_features_filename, 'r', encoding="utf-8") as features_f:
             for line in features_f:
-                split = line.strip().split('\t')
-                letter, features = split
+                letter, features = line.strip().split('\t', 1)
                 self.char2features[letter].update(features.split())
 
     def is_vowel(self, char):
