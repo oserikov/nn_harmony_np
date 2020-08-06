@@ -1,36 +1,36 @@
-а	vow	-front
-ы	vow	
-е	vow	+front
-т	TODO	
-н	TODO	
-л	TODO	
-ш	TODO	
-м	TODO	
-о	vow	-front
-к	TODO	
-р	TODO	
-и	vow	+front
-у	vow	-front
-с	TODO	
-в	TODO	
-п	TODO	
-д	TODO	
-й	TODO	
-ч	TODO	
-г	TODO	
-ж	TODO	
-ӱ	vow	+front
-з	TODO	
-я	vow	
-ҥ	TODO	
-ь	TODO	
-э	vow	
-ӧ	vow	+front
-б	TODO	
-ф	TODO	
-ц	TODO	
-х	TODO	
-ю	vow	
-ё	vow	
-щ	TODO	
-ъ	TODO	
+а	vow	-front	-round		
+ы	vow	-front	-round		
+е	vow	+front	-round		
+т	cons			-voiced	+stop
+н	cons				
+л	cons			+voiced	
+ш	cons			-voiced	
+м	cons				
+о	vow	-front	+round		
+к	cons			-voiced	+stop
+р	cons				
+и	vow	+front	-round		
+у	vow	-front	+round		
+с	cons			-voiced	
+в	cons			+voiced	
+п	cons			-voiced	+stop
+д	cons			+voiced	+stop
+й	cons				
+ч	cons				
+г	cons			+voiced	+stop
+ж	cons			+voiced	
+ӱ	vow	+front	+round		
+з	cons			+voiced	
+я	vow				
+ҥ	cons				
+ь	TODO				
+э	vow				
+ӧ	vow	+front	+round		
+б	cons			+voiced	+stop
+ф	cons			-voiced	
+ц	cons				
+х	cons			-voiced	
+ю	vow				
+ё	vow				
+щ	cons			-voiced	
+ъ	TODO				
