@@ -1,5 +1,5 @@
 from nn_model import ModelStateLogDTO
-
+import torch
 
 class ModelRunner:
     def __init__(self, model, char2ix, device):
