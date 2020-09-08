@@ -1,5 +1,5 @@
 from tqdm.autonotebook import tqdm
-
+import torch
 from torch.utils.data import Dataset, DataLoader
 
 class WordData(Dataset):
