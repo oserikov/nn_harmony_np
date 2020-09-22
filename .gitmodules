@@ -1,0 +1,9 @@
+[submodule "data/fin/UD_Finnish-TDT"]
+	path = data/fin/UD_Finnish-TDT
+	url = https://github.com/UniversalDependencies/UD_Finnish-TDT
+[submodule "data/rus/UD_Russian-SynTagRus"]
+	path = data/rus/UD_Russian-SynTagRus
+	url = https://github.com/UniversalDependencies/UD_Russian-SynTagRus.git
+[submodule "data/tur/UD_Turkish-PUD"]
+	path = data/tur/UD_Turkish-PUD
+	url = https://github.com/UniversalDependencies/UD_Turkish-PUD

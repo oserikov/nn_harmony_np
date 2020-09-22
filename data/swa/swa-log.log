@@ -1,1 +1,0 @@
-grep -v ^\< hcs2_old_news.vrt | cut -d $'\t' -f1,3 | grep [[:space:]][N,V,ADJ]$ | cut -d $'\t' -f1 | sed -e 's/.*/\L\0/' 
