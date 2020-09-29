@@ -206,7 +206,7 @@ MAX_EPOCHS = 500
 STOP_DISTANCE = 10
 STOP_NUMBER = 7
 
-liveloss = PlotLosses(groups={"loss": ["train", "test"]})
+# liveloss = PlotLosses(groups={"loss": ["train", "test"]})
 epoch_n = 0
 
 task_fn2accuracy = {}
@@ -224,8 +224,8 @@ for epoch in range(epoch_n, MAX_EPOCHS):
     print(f"epoch: {epoch}", "train_loss: {train_loss}", "test_loss: {test_loss}", sep='\t')
     logs.append({"train": train_loss, "test": test_loss, "epoch": epoch})
 
-    if epoch % 1 == 0:
-        liveloss.send()
+    # if epoch % 1 == 0:
+    #     liveloss.send()
 
     if epoch % 10 == 0:
         os.system("rm *{prediction, balanced.tsv}")
