@@ -77,10 +77,10 @@ test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE)
 def build_datasets(model_runner, model_filename="model_size_6_activation_tanh"):
     test_data_fn = f"data/{LANG}/{LANG}_words_clean_syllabified.txt"
     phonology_features_filename = f"data/{LANG}/{LANG}_features.tsv"
-
-    subprocess.call(["bash", "-c", f"shuf <(cut - d' ' -f1 {test_data_fn}) | head - 250 > probing_subset.txt"])
-
     test_data_fn = "probing_subset.txt"
+
+    pd.read_csv(test_data_fn, names=["w", "s"], sep=' ')["w"].sample(n=250).to_csv(test_data_fn, header=False, index=False)
+
 
     datasets = []
     # for model_filename in ["model_size_6_activation_tanh"]:
