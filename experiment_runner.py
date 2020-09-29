@@ -78,7 +78,7 @@ def build_datasets(model_runner, model_filename="model_size_6_activation_tanh"):
     test_data_fn = f"data/{LANG}/{LANG}_words_clean_syllabified.txt"
     phonology_features_filename = f"data/{LANG}/{LANG}_features.tsv"
 
-    os.system(f"shuf < (cut - d' ' -f1 {test_data_fn}) | head - 250 > probing_subset.txt")
+    os.system(f"shuf <(cut - d' ' -f1 {test_data_fn}) | head - 250 > probing_subset.txt")
 
     test_data_fn = "probing_subset.txt"
 
@@ -228,7 +228,7 @@ for epoch in range(epoch_n, MAX_EPOCHS):
     #     liveloss.send()
 
     if epoch % 10 == 0:
-        os.system("rm *{prediction, balanced.tsv}")
+        os.system("rm *{prediction,balanced.tsv}")
 
     if epoch % 20 == 0:
         model_runner = ModelRunner(model, char2index, device)
