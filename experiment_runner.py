@@ -27,7 +27,7 @@ if len(sys.argv) > 2:
     LANG = sys.argv[1]
     HIDDEN_SIZE = int(sys.argv[2])
 
-
+print(f"lang: {LANG}\th_size: {HIDDEN_SIZE}")
 
 def strip_accents(s):
     return ''.join(c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn')
