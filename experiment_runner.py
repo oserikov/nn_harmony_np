@@ -9,7 +9,7 @@ import torch
 from livelossplot import PlotLosses
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
-
+import pickle
 from experiment_datasets_creator import ExperimentCreator
 from model_runner import ModelRunner
 from phonology_tool import PhonologyTool
@@ -254,6 +254,6 @@ for epoch in range(epoch_n, MAX_EPOCHS):
                     task_fn2accuracy[(task_fn, hash, with_agg_v, "LREG")] = probing_metainfo
 
 
-res_f = open(f"{LANG}_{HIDDEN_SIZE}.log", 'w')
-json.dump({"logs": logs, "taskfn2accuracy": task_fn2accuracy, "HIDDEN": HIDDEN_SIZE, "LANG":LANG}, res_f)
+res_f = open(f"{LANG}_{HIDDEN_SIZE}.log.pkl", 'w')
+pickle.dump({"logs": logs, "taskfn2accuracy": task_fn2accuracy, "HIDDEN": HIDDEN_SIZE, "LANG":LANG}, res_f)
 res_f.close()
