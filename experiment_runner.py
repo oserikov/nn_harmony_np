@@ -254,6 +254,6 @@ for epoch in range(epoch_n, MAX_EPOCHS):
                     task_fn2accuracy[(task_fn, hash, with_agg_v, "LREG")] = probing_metainfo
 
 
-res_f = open(f"{LANG}_{HIDDEN_SIZE}.log.pkl", 'w')
+res_f = open(f"{LANG}_{HIDDEN_SIZE}.log.pkl", 'wb')
 pickle.dump({"logs": logs, "taskfn2accuracy": task_fn2accuracy, "HIDDEN": HIDDEN_SIZE, "LANG":LANG}, res_f)
 res_f.close()
