@@ -1,4 +1,4 @@
-# import sys,os
+import sys
 # sys.path.append(os.path.join(os.getcwd(), "nn_harmony_np"))
 import os
 import unicodedata
@@ -23,6 +23,10 @@ import json
 
 HIDDEN_SIZE = 3
 LANG = "tur"
+if len(sys.argv) > 2:
+    LANG = sys.argv[1]
+    HIDDEN_SIZE = int(sys.argv[2])
+
 
 
 def strip_accents(s):
