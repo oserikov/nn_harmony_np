@@ -224,7 +224,7 @@ for epoch in range(epoch_n, MAX_EPOCHS):
 
     # liveloss.update({"train": train_loss, "test": test_loss})
 
-    print(f"epoch: {epoch}", f"train_loss: {train_loss}", f"test_loss: {test_loss}", sep='\t')
+    print(f"lang: {LANG}", f"epoch: {epoch}", f"train_loss: {train_loss}", f"test_loss: {test_loss}", sep='\t')
     logs.append({"train": train_loss, "test": test_loss, "epoch": epoch})
 
     # if epoch % 1 == 0:
