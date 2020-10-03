@@ -149,7 +149,7 @@ def build_datasets(model_runner, model_filename="model_size_6_activation_tanh"):
         # front_feature_dataset
         front_feature_dataset_fn = model_filename_prefix + "_front_feature_dataset.tsv"
         front_feature_dataset = experimentCreator.make_dataset_pretty(experimentCreator.front_feature_dataset())
-        front_feature_dataset = [e for e in front_feature_dataset if phonologyTool.is_vowel(e[0]["1_char"])]
+        front_feature_dataset = [e for e in front_feature_dataset if e[0]["1_char"] in "aouäöy"]
         experimentCreator.save_dataset_to_tsv(front_feature_dataset, front_feature_dataset_fn)
         datasets.append(front_feature_dataset_fn)
 
