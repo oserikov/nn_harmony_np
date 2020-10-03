@@ -1,4 +1,4 @@
-a	vow
+a	vow -front
 t	cons
 i	vow
 e	vow
@@ -6,9 +6,9 @@ s	cons
 n	cons
 l	cons
 ä	vow	+front
-u	vow
+u	vow -front
 k	cons
-o	vow
+o	vow -front
 r	cons
 v	cons
 p	cons
