@@ -142,7 +142,7 @@ def dt_probe_dataset(task_fn, probing_hash, with_agg=True, agg_type="mean", tree
         dt = DecisionTreeClassifier(max_depth=2)
         dt.fit(features, target)
     else:
-        dt = LogisticRegression()
+        dt = LogisticRegression(penalty="l1")
         dt.fit(features, target)
         logreg_feat_importance = list(zip(features.columns,
                                           dt.coef_[0]))
