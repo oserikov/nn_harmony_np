@@ -235,7 +235,7 @@ for epoch in range(epoch_n, MAX_EPOCHS):
     if epoch % 20 == 0:
         model_runner = ModelRunner(model, char2index, device)
         # model_runner.run_model_on_word("bare")
-        datasets = build_datasets(model_runner, model_filename="turmodel_size_6_epoch_" + str(epoch))
+        datasets = build_datasets(model_runner, model_filename=f"{LANG}model_size_{HIDDEN_SIZE}_epoch_" + str(epoch))
 
         for task_fn in datasets:
             for hash in map(str, range(1)):
